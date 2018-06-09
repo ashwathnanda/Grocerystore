@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Grocery Store</title>
+<!-- for-mobile-apps -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
+        function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!-- //for-mobile-apps -->
+<link rel="stylesheet" href= {{ url_for('static', filename='css/bootstrap.css') }} type="text/css" media="all" />
+<link href= {{ url_for('static', filename='css/style.css') }} rel="stylesheet" type="text/css" media="all" />
+<!-- font-awesome icons -->
+<link href= {{ url_for('static', filename='css/font-awesome.css') }} rel="stylesheet" type="text/css" media="all" />
+<!-- //font-awesome icons -->
+<!-- js -->
+<script src="{{ url_for('static', filename = 'js/jquery-1.11.1.min.js') }}"></script>
+<!-- //js -->
+<link href='//fonts.googleapis.com/css?family=Ubuntu:400,300,300italic,400italic,500,500italic,700,700italic' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href={{ url_for('static', filename='css/topStyle.css') }} />
+<link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+<!-- start-smoth-scrolling -->
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/move-top.js') }}"> </script>
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/easing.js') }}"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function($) {
+        $(".scroll").click(function(event){
+            event.preventDefault();
+            $('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
+        });
+    });
+</script>
+<!-- start-smoth-scrolling -->
+</head>
+
+<body>
+<!-- header -->
+    <div class="agileits_header">
+        <div class="w3l_offers">
+            <a href="#">Special Offers !</a>
+        </div>
+        <div class="w3l_search">
+            <form action="#" method="post">
+                <input type="text" name="Product" value="Search a product..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search a product...';}" required="">
+                <input type="submit" value=" ">
+            </form>
+        </div>
+        <div class="product_list_header">
+            <form action="/cart" class="last">
+                <fieldset>
+                    <input type="submit" name="submit" value="View your cart" class="button" />
+                </fieldset>
+            </form>
+        </div>
+
+        {% if not loggedIn %}
+        <div class="w3l_header_right">
+            <ul>
+                <li class="dropdown profile_details_drop">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user" aria-hidden="true"></i><span class="caret"></span></a>
+                    <div class="mega-dropdown-menu">
+                        <div class="w3ls_vegetables">
+                            <ul class="dropdown-menu drp-mnu">
+
+                                <li><a href="/loginForm">Login</a></li>
+                                <li><a href="/loginForm">Sign Up</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        {%else%}
+        <div class="w3l_header_right">
+        <div class="dropdown">
+        <button class="dropbtn">Hello, <br>{{firstName}}</button>
+        <div class="dropdown-content">
+            <a href="/account/orders">Your orders</a>
+            <a href="/account/profile">Your profile</a>
+            <hr>
+            <a href="/logout">Sign Out</a>
+        </div>
+    </div>
+
+        </div>
+        {% endif %}
+
+
+        <div class="w3l_header_right1">
+            <h2><a href="#">Contact Us</a></h2>
+        </div>
+        <div class="clearfix"> </div>
+    </div>
+<!-- script-for sticky-nav -->
+    <script>
+    $(document).ready(function() {
+         var navoffeset=$(".agileits_header").offset().top;
+         $(window).scroll(function(){
+            var scrollpos=$(window).scrollTop();
+            if(scrollpos >=navoffeset){
+                $(".agileits_header").addClass("fixed");
+            }else{
+                $(".agileits_header").removeClass("fixed");
+            }
+         });
+
+    });
+    </script>
+
+    <div class="logo_products">
+        <div class="container">
+            <div class="w3ls_logo_products_left">
+                <h1><a href="/"><span>Grocery</span> Store</a></h1>
+            </div>
+            <div class="w3ls_logo_products_left1">
+                <ul class="special_items">
+                    <li><a href="#">Events</a><i>/</i></li>
+                    <li><a href="#">About Us</a><i>/</i></li>
+                    <li><a href="#">Services</a></li>
+                </ul>
+            </div>
+            <div class="w3ls_logo_products_left1">
+                <ul class="phone_email">
+                    <li><i class="fa fa-phone" aria-hidden="true"></i>(+91) 9876543210 </li>
+                    <li><i class="fa fa-envelope-o" aria-hidden="true"></i><a href="mailto:store@grocery.com">store@grocery.com</a></li>
+                </ul>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+    </div>
+
+    <div class="banner">
+        <div class="w3l_banner_nav_right">
+<!-- about -->
+        <div class="privacy about">
+            <h3>Chec<span>kout</span></h3>
+
+          <div class="checkout-right">
+                <table class="timetable_sub">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Product Name</th>
+                            <th>Price</th>
+                            <th>Remove</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for row in products %}
+                    <tr class="rem1">
+
+                        <td class="invert-image"><a href="#"><img src={{url_for('static', filename='uploads/'+row[3])}} id="image" class="img-responsive"> </a></td>
+                        <td class="invert">
+                             <div class="quantity">
+                                <div class="quantity-select">
+                                    <div class="entry value-minus">&nbsp;</div>
+                                    <div class="entry value"><span>1</span></div>
+                                    <div class="entry value-plus active">&nbsp;</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="invert">{{row[1]}}</td>
+
+                        <td class="invert">{{row[2]}}</td>
+                        <td class="invert">
+                            <div class="rem">
+                                <div class="close1"> <a href="/removeFromCart?productId={{row[0]}}"></a></div>
+                            </div>
+
+                        </td>
+                    </tr>
+                       {% endfor %}
+                </tbody>
+                </table>
+            </div>
+            <div class="checkout-left">
+                <div class="col-md-4 checkout-left-basket">
+                    <h4>Continue to basket</h4>
+                    {% for row in products %}
+                    <ul>
+                        <li>{{row[1]}} <i>-</i> <span>{{row[2]}} </span></li>
+                    </ul>
+                    {% endfor %}
+                    <li>Total <i>-</i> <span>{{totalPrice}}</span></li>
+                </div>
+
+                    <div class="checkout-right-basket">
+                            <a href="/checkout">Make a Payment <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a>
+                    </div>
+                <div class="clearfix"> </div>
+
+            </div>
+
+        </div>
+<!-- //about -->
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="footer">
+        <div class="container">
+            <div class="col-md-3 w3_footer_grid">
+                <h3>information</h3>
+                <ul class="w3_footer_grid_list">
+                    <li><a href="events.html">Events</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="services.html">Services</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3 w3_footer_grid">
+                <h3>policy info</h3>
+                <ul class="w3_footer_grid_list">
+                    <li><a href="faqs.html">FAQ</a></li>
+                    <li><a href="privacy.html">privacy policy</a></li>
+                    <li><a href="privacy.html">terms of use</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3 w3_footer_grid">
+                <h3>what in stores</h3>
+                <ul class="w3_footer_grid_list">
+                {% for row in categoryData %}
+                    <li><a href="/displayCategory?categoryId={{row[0]}}">{{row[1]}}</a></li>
+                {% endfor %}
+                </ul>
+            </div>
+            <div class="col-md-3 w3_footer_grid">
+                <h3>twitter posts</h3>
+                <ul class="w3_footer_grid_list1">
+                    <li><label class="fa fa-twitter" aria-hidden="true"></label><i>01 day ago</i><span>Non numquam <a href="#">http://sd.ds/13jklf#</a>
+                        eius modi tempora incidunt ut labore et
+                        <a href="#">http://sd.ds/1389kjklf#</a>quo nulla.</span></li>
+                    <li><label class="fa fa-twitter" aria-hidden="true"></label><i>02 day ago</i><span>Con numquam <a href="#">http://fd.uf/56hfg#</a>
+                        eius modi tempora incidunt ut labore et
+                        <a href="#">http://fd.uf/56hfg#</a>quo nulla.</span></li>
+                </ul>
+            </div>
+            <div class="clearfix"> </div>
+            <div class="agile_footer_grids">
+                <div class="col-md-3 w3_footer_grid agile_footer_grids_w3_footer">
+                    <div class="w3_footer_grid_bottom">
+                        <h4>100% secure payments</h4>
+                        <img src={{url_for('static', filename='images/card.png')}} alt=" " class="img-responsive" />
+                    </div>
+                </div>
+                <div class="col-md-3 w3_footer_grid agile_footer_grids_w3_footer">
+                    <div class="w3_footer_grid_bottom">
+                        <h5>connect with us</h5>
+                        <ul class="agileits_social_icons">
+                            <li><a href="www.facebook.com" class="facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                            <li><a href="#" class="twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                            <li><a href="#" class="instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="clearfix"> </div>
+            </div>
+            <div class="wthree_footer_copy">
+                <p>© 2018 Grocery Store. All rights reserved</a></p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
